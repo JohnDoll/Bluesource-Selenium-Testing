@@ -1,4 +1,4 @@
-package bluesourcepages;
+package com.johndoll.bluesourceselenium.pages;
 
 import java.util.List;
 import org.openqa.selenium.By;

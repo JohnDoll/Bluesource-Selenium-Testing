@@ -1,4 +1,4 @@
-package bluesourcepages;
+package com.johndoll.bluesourceselenium.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

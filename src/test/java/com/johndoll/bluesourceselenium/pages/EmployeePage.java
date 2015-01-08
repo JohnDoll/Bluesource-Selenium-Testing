@@ -1,5 +1,6 @@
-package bluesourcepages;
+package com.johndoll.bluesourceselenium.pages;
  
+import com.johndoll.bluesourceselenium.utility.Wait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -125,6 +126,34 @@ public class EmployeePage {
     
     public boolean firstNameTableExists(){
         return driver.findElements(By.linkText("First Name")).size() > 0;
+    }
+    
+    public void createNewEmployee(String username, String firstName, String lastName, String title, String role, String manager, String status, String bridgeTime, String location, String startDate, String cellPhone, String officePhone, String email, String imName, String imClient, String department){
+        btnAdd().click();
+        
+        long timer = System.currentTimeMillis();
+        while (!firstName().isDisplayed() && System.currentTimeMillis() - timer < 10000);
+        Wait wait = new Wait();
+        wait.waitMilSec(500);
+        
+        username().sendKeys(username);
+        firstName().sendKeys(firstName);
+        lastName().sendKeys(lastName);
+        title().sendKeys(title);
+        role().sendKeys(role);
+        manager().sendKeys(manager);
+        status().sendKeys(status);
+        bridgeTime().sendKeys(bridgeTime);
+        location().sendKeys(location);
+        startDate().sendKeys(startDate);
+        cellPhone().sendKeys(cellPhone);
+        officePhone().sendKeys(officePhone);
+        email().sendKeys(email);
+        imName().sendKeys(imName);
+        imClient().sendKeys(imClient);
+        department().sendKeys(department);
+        wait.waitMilSec(500);
+        btnCreateEmployee().click();
     }
     
 }
