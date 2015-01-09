@@ -10,41 +10,21 @@ import org.openqa.selenium.WebElement;
 public class TitlePage {
 
     private WebDriver driver;
-    private NewTitlePage nTitle;
-    private EditTitlePage eTitle;
 
     public TitlePage(WebDriver driver) {
         this.driver = driver;
-        this.nTitle = new NewTitlePage(this.driver);
-        this.eTitle = new EditTitlePage(this.driver);
     }
 
-    public WebElement deleteTitle(String title) {
+    public WebElement deleteATitle(String title) {
         return driver.findElement(By.xpath("//td[contains(text(), '" + title + "')]//div//a//span[@class='glyphicon glyphicon-trash']"));
     }
 
-    public WebElement editTitle(String title) {
+    public WebElement editATitle(String title) {
         return driver.findElement(By.xpath("//td[contains(text(), '" + title + "')]//div//a//span[@class='glyphicon glyphicon-pencil']"));
     }
 
-    public WebElement addTitle() {
+    public WebElement addATitle() {
         return driver.findElement(By.linkText("New Title"));
-    }
-    
-    public WebElement newTitleName(){
-        return nTitle.name();
-    }
-    
-    public WebElement btnCreateTitle(){
-        return nTitle.btnCreateTitle();
-    }
-    
-    public WebElement editTitleName(){
-        return eTitle.name();
-    }
-    
-    public WebElement btnUpdateTitle(){
-        return eTitle.btnUpdateTitle();
     }
     
     public boolean createSuccessful(){
@@ -57,6 +37,28 @@ public class TitlePage {
     
     public boolean titleExists(String title){
         return driver.findElements(By.xpath("//td[contains(text(), '" + title + "')]//div//a//span[@class='glyphicon glyphicon-pencil']")).size() > 0;
+    }
+    
+    public void addTitle(String titleName){
+        addATitle().click();
+        NewTitlePage ntp = new NewTitlePage(driver);
+        
+        ntp.titleName().sendKeys(titleName);
+        ntp.btnCreateTitle().click();
+    }
+    
+    public void editTitle(String titleName, String newTitleName){
+        editATitle(titleName).click();
+        EditTitlePage etp = new EditTitlePage(driver);
+        
+        etp.titleName().clear();
+        etp.titleName().sendKeys(newTitleName);
+        etp.btnUpdateTitle().click();
+    }
+    
+    public void deleteTitle(String titleName){
+        deleteATitle(titleName).click();
+        driver.switchTo().alert().accept();
     }
     
 }

@@ -24,7 +24,7 @@ public class AddSubdepartmentPage {
     }
     
     public WebElement btnCreateDepartment(){
-        return driver.findElement(By.xpath("//input[@value='Create Department'"));
+        return driver.findElement(By.xpath("//input[@value='Create Department']"));
     }
     
 }

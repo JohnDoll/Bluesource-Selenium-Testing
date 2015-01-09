@@ -1,5 +1,6 @@
 package com.johndoll.bluesourceselenium.pages;
 
+import com.johndoll.bluesourceselenium.utility.Wait;
 import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -11,57 +12,59 @@ import org.openqa.selenium.WebElement;
 public class ProjectPage {
     
     private WebDriver driver;
+    private long timer;
+    private Wait wait = new Wait();
     
     public ProjectPage(WebDriver driver){
         this.driver = driver;
     }
     
-    public WebElement btnAdd(){
+    private WebElement btnAdd(){
         return driver.findElement(By.xpath("//button[contains(text(),'Add')]"));
     }
     
-    public WebElement showInactives(){
+    private WebElement showInactives(){
         return driver.findElement(By.xpath(("//button[contains(text(), 'Show Inactives')]")));
     }
     
-    public WebElement name(){
+    private WebElement projectName(){
         return driver.findElement(By.id("project_name"));
     }
     
-    public WebElement clientPartner(){
+    private WebElement clientPartner(){
         return driver.findElement(By.id("project_client_partner_id"));
     }
     
-    public WebElement btnAddTeamLead(){
+    private WebElement btnAddTeamLead(){
         return driver.findElement(By.id("add-team-lead"));
     }
     
-    public WebElement teamLeads(){
+    private WebElement teamLeads(){
         return driver.findElement(By.id("project_leads"));
     }
     
-    public WebElement status(){
+    private WebElement status(){
         return driver.findElement(By.id("project_status"));
     }
     
-    public WebElement startDate(){
+    private WebElement startDate(){
         return driver.findElement(By.id("project_start_date"));
     }
     
-    public WebElement endDate(){
+    private WebElement endDate(){
         return driver.findElement(By.id("project_end_date"));
     }
     
-    public WebElement btnCreateProject(){
+    private WebElement btnCreateProject(){
         return driver.findElement(By.xpath("//input[@value='Create Project']"));
     }
     
-    public WebElement btnClose(){
+    private WebElement btnClose(){
         return driver.findElement(By.xpath(("//button[contains(text(), 'Close')]")));
     }
     
-    public boolean addFormExists(){
-        return name().isDisplayed();
+    private boolean addFormExists(){
+        return projectName().isDisplayed();
     }
     
     public boolean createSuccessful(){
@@ -72,31 +75,75 @@ public class ProjectPage {
         return driver.findElements(By.className("alert-danger")).size() > 0;
     }
     
-    public List<WebElement> allTeamLeads(){
+    private List<WebElement> allTeamLeads(){
         return driver.findElements(By.id("project_leads"));
     }
     
-    public WebElement searchBar(){
+    private WebElement searchBar(){
         return driver.findElement(By.xpath("//input[@id='search-bar']"));
     }
     
-    public boolean searchProjectExists(String project){
+    private boolean searchProjectExists(String project){
         return driver.findElements(By.linkText(project)).size() > 0;
     }
     
-    public boolean nextPageExists(){
+    private boolean nextPageExists(){
         return driver.findElements(By.linkText("»")).size() > 0;
     }
     
-    public boolean previousPageExists(){
+    private boolean previousPageExists(){
         return driver.findElements(By.linkText("«")).size() > 0;
     }
     
-    public WebElement nextPage(){
+    private WebElement nextPage(){
         return driver.findElement(By.linkText("»"));
     }
     
-    public WebElement previousPage(){
+    private WebElement previousPage(){
         return driver.findElement(By.linkText("«"));
+    }
+    
+    private boolean projectNameColumnExists(){
+        return driver.findElements(By.xpath("//a[contains(text(), 'Project Name')]")).size() > 0;
+    }
+    
+    public void createProject(String projectName, String clientPartner, String teamLead, String status, String startDate, String endDate){
+        btnAdd().click();
+
+        timer = System.currentTimeMillis();
+        while (!projectName().isDisplayed() && System.currentTimeMillis() - timer < 10000);
+        
+        wait.waitMilSec(500);
+        projectName().sendKeys(projectName);
+        clientPartner().sendKeys(clientPartner);
+        String[] teamLeads = teamLead.split(", ");
+        for(int i = 0; i < teamLeads.length; i++){
+            btnAddTeamLead().click();
+            allTeamLeads().get(i).sendKeys(teamLeads[i]);
+        }
+        status().sendKeys(status);
+        startDate().sendKeys(startDate);
+        endDate().sendKeys(endDate);
+        btnCreateProject().click();
+    }
+    
+    public boolean projectSearch(String projectName){
+        boolean projectFound = false;
+        searchBar().clear();
+        searchBar().sendKeys(projectName);
+
+        while (!projectFound) {
+            timer = System.currentTimeMillis();
+            while(!projectNameColumnExists() && System.currentTimeMillis() - timer < 10000)
+            wait.waitMilSec(500);
+            projectFound = searchProjectExists(projectName);
+            if(nextPageExists() && nextPage().isEnabled()) {
+                nextPage().click();
+            } else {
+                break;
+            }
+        }
+        
+        return projectFound;
     }
 }

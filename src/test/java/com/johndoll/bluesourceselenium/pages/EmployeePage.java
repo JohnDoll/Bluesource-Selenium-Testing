@@ -1,6 +1,7 @@
 package com.johndoll.bluesourceselenium.pages;
- 
+
 import com.johndoll.bluesourceselenium.utility.Wait;
+import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -9,133 +10,150 @@ import org.openqa.selenium.WebElement;
  * @author Jonathan Doll
  */
 public class EmployeePage {
-    
+
     private WebDriver driver;
-    
-    public EmployeePage(WebDriver driver){
+    private Wait wait = new Wait();
+    private long timer;
+
+    public EmployeePage(WebDriver driver) {
         this.driver = driver;
     }
-    
-    public WebElement btnAdd(){
+
+    private WebElement btnAdd() {
         return driver.findElement(By.xpath("//button[contains(text(),'Add')]"));
     }
-    
-    public WebElement username(){
+
+    private WebElement username() {
         return driver.findElement(By.id("employee_username"));
     }
-    
-    public WebElement firstName(){
+
+    private WebElement firstName() {
         return driver.findElement(By.id("employee_first_name"));
     }
-    
-    public WebElement lastName(){
+
+    private WebElement lastName() {
         return driver.findElement(By.id("employee_last_name"));
     }
-    
-    public WebElement btnCreateEmployee(){
+
+    private WebElement btnCreateEmployee() {
         return driver.findElement(By.name("commit"));
     }
-    
-    public boolean createSuccessful(){
+
+    public boolean createSuccessful() {
         return driver.findElements(By.className("alert-success")).size() > 0;
     }
-    
-    public boolean createFailure(){
+
+    public boolean createFailure() {
         return driver.findElements(By.className("alert-danger")).size() > 0;
     }
-    
-    public Boolean welcomeMessage(){
+
+    public Boolean welcomeMessage() {
         return driver.findElements(By.xpath("//body//div//section//div//h1")).size() > 0;
     }
-    
-    public WebElement nameLink(){
+
+    public WebElement nameLink() {
         return driver.findElement(By.xpath("//div//h1[contains(text(),'Welcome')]//a"));
     }
-    
-    public WebElement searchBar(){
+
+    private WebElement searchBar() {
         return driver.findElement(By.xpath("//input[@id='search-bar']"));
     }
-    
-    public WebElement searchFirstName(String firstName){
+
+    private WebElement searchFirstName(String firstName) {
         return driver.findElement(By.linkText(firstName));
     }
-    
-    public WebElement searchLastName(String lastName){
+
+    private WebElement searchLastName(String lastName) {
         return driver.findElement(By.linkText(lastName));
     }
-    
-    public boolean searchFirstNameExists(String firstName){
+
+    private boolean searchFirstNameExists(String firstName) {
         return driver.findElements(By.linkText(firstName)).size() > 0;
     }
-    
-    public boolean searchLastNameExists(String lastName){
+
+    private boolean searchLastNameExists(String lastName) {
         return driver.findElements(By.linkText(lastName)).size() > 0;
     }
-    
-    public WebElement title(){
+
+    private WebElement title() {
         return driver.findElement(By.id("employee_title_id"));
     }
-    
-    public WebElement role(){
+
+    private WebElement role() {
         return driver.findElement(By.id("employee_role"));
     }
-    
-    public WebElement manager(){
+
+    private WebElement manager() {
         return driver.findElement(By.id("employee_manager_id"));
     }
-    
-    public WebElement status(){
+
+    private WebElement status() {
         return driver.findElement(By.id("employee_status"));
     }
-    
-    public WebElement bridgeTime(){
+
+    private WebElement bridgeTime() {
         return driver.findElement(By.id("employee_bridge_time"));
     }
-    
-    public WebElement location(){
+
+    private WebElement location() {
         return driver.findElement(By.id("employee_location"));
     }
-    
-    public WebElement startDate(){
+
+    private WebElement startDate() {
         return driver.findElement(By.id("employee_start_date"));
     }
-    
-    public WebElement cellPhone(){
+
+    private WebElement cellPhone() {
         return driver.findElement(By.id("employee_cell_phone"));
     }
-    
-    public WebElement officePhone(){
+
+    private WebElement officePhone() {
         return driver.findElement(By.id("employee_office_phone"));
     }
-    
-    public WebElement email(){
+
+    private WebElement email() {
         return driver.findElement(By.id("employee_email"));
     }
-    
-    public WebElement imName(){
+
+    private WebElement imName() {
         return driver.findElement(By.id("employee_im_name"));
     }
-    
-    public WebElement imClient(){
+
+    private WebElement imClient() {
         return driver.findElement(By.id("employee_im_client"));
     }
-    
-    public WebElement department(){
+
+    private WebElement department() {
         return driver.findElement(By.id("employee_department_id"));
     }
-    
-    public boolean firstNameTableExists(){
+
+    private boolean firstNameTableExists() {
         return driver.findElements(By.linkText("First Name")).size() > 0;
     }
-    
-    public void createNewEmployee(String username, String firstName, String lastName, String title, String role, String manager, String status, String bridgeTime, String location, String startDate, String cellPhone, String officePhone, String email, String imName, String imClient, String department){
+
+    private boolean nextPageExists() {
+        return driver.findElements(By.linkText("»")).size() > 0;
+    }
+
+    private boolean previousPageExists() {
+        return driver.findElements(By.linkText("«")).size() > 0;
+    }
+
+    private WebElement nextPage() {
+        return driver.findElement(By.linkText("»"));
+    }
+
+    private WebElement previousPage() {
+        return driver.findElement(By.linkText("«"));
+    }
+
+    public void createNewEmployee(String username, String firstName, String lastName, String title, String role, String manager, String status, String bridgeTime, String location, String startDate, String cellPhone, String officePhone, String email, String imName, String imClient, String department) {
         btnAdd().click();
-        
-        long timer = System.currentTimeMillis();
+
+        timer = System.currentTimeMillis();
         while (!firstName().isDisplayed() && System.currentTimeMillis() - timer < 10000);
-        Wait wait = new Wait();
         wait.waitMilSec(500);
-        
+
         username().sendKeys(username);
         firstName().sendKeys(firstName);
         lastName().sendKeys(lastName);
@@ -155,5 +173,35 @@ public class EmployeePage {
         wait.waitMilSec(500);
         btnCreateEmployee().click();
     }
-    
+
+    public boolean employeeSearch(String firstName, String lastName) {
+        boolean employeeFound = false;
+        searchBar().clear();
+        searchBar().sendKeys(firstName + " " + lastName);
+
+        while (!employeeFound) {
+            timer = System.currentTimeMillis();
+            while (!firstNameTableExists() && System.currentTimeMillis() - timer < 15000);
+            wait.waitMilSec(500);
+
+            List<WebElement> employeeFirstNames = driver.findElements(By.linkText(firstName));
+            List<WebElement> employeeLastNames = driver.findElements(By.linkText(lastName));
+
+            for (WebElement employeeFirstName : employeeFirstNames) {
+                for (WebElement employeeLastName : employeeLastNames) {
+                    if (employeeFirstName.getLocation().getY() == employeeLastName.getLocation().getY()) {
+                        employeeFound = true;
+                        break;
+                    }
+                }
+            }
+            if (nextPageExists() && nextPage().isEnabled()) {
+                nextPage().click();
+            } else {
+                break;
+            }
+        }
+        return employeeFound;
+    }
+
 }

@@ -4,6 +4,7 @@ import com.johndoll.bluesourceselenium.pages.EmployeePage;
 import com.johndoll.bluesourceselenium.pages.Links;
 import com.johndoll.bluesourceselenium.pages.LoginPage;
 import com.johndoll.bluesourceselenium.utility.ExcelReader;
+import com.johndoll.bluesourceselenium.utility.ResourceLocation;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import static org.testng.Assert.assertTrue;
@@ -34,8 +35,7 @@ public class AddEmployee {
     
     @DataProvider
     public Object[][] addEmployeeData(){
-        ExcelReader addEmployee = new ExcelReader("src\\test\\resources\\AddEmployee.xlsx");
-        return addEmployee.worksheetToArray(1);
+        return new ExcelReader(ResourceLocation.TestDataLocation + "AddEmployee.xlsx").worksheetToArray(1);
     }
     
     @Test(dataProvider = "addEmployeeData",  threadPoolSize = 3)
@@ -51,8 +51,10 @@ public class AddEmployee {
         
         try{
             assertTrue(employee.createSuccessful(), "Employee Created Successfully");
+            assertTrue(employee.employeeSearch(firstName, lastName), "Employee successfully found in list");
         }catch(AssertionError e){
             System.err.println(e);
+            assertTrue(false);
         }
     }
     

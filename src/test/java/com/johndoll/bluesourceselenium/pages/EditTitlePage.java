@@ -14,7 +14,7 @@ public class EditTitlePage {
         this.driver = driver;
     }
     
-    public WebElement name(){
+    public WebElement titleName(){
         return driver.findElement(By.id("title_name"));
     }
     
