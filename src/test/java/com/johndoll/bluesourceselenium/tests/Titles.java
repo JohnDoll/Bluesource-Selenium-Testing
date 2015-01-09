@@ -29,13 +29,13 @@ public class Titles {
         driver.get("http://bluesourcestaging.herokuapp.com/");
         LoginPage login = new LoginPage(driver);
         login.login("company.admin", "The McRib is back");
-        
         link = new Links(driver);
         title = new TitlePage(driver);
     }
 
     @AfterClass
     public static void tearDownClass() throws Exception {
+        link.logout().click();
         driver.close();
     }
     

@@ -19,6 +19,7 @@ import com.johndoll.bluesourceselenium.utility.ResourceLocation;
 public class AddProject {
     
     private static WebDriver driver;
+    private static Links link;
     
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -26,10 +27,12 @@ public class AddProject {
         driver.get("http://bluesourcestaging.herokuapp.com/");
         LoginPage login = new LoginPage(driver);
         login.login("company.admin", "The McRib is back");
+        link = new Links(driver);
     }
 
     @AfterClass
     public static void tearDownClass() throws Exception {
+        link.logout().click();
         driver.close();
     }
     

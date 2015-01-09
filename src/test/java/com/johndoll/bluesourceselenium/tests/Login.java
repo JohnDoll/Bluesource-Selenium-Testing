@@ -1,6 +1,7 @@
 package com.johndoll.bluesourceselenium.tests;
 
 import com.johndoll.bluesourceselenium.pages.EmployeePage;
+import com.johndoll.bluesourceselenium.pages.Links;
 import com.johndoll.bluesourceselenium.pages.LoginPage;
 import com.johndoll.bluesourceselenium.pages.TimeOffPage;
 import com.johndoll.bluesourceselenium.utility.ExcelReader;
@@ -51,6 +52,11 @@ public class Login {
         }else if(timeOff.timeOffMessage()){
             assertTrue(timeOff.timeOffMessage(), "Time Off Message Displayed");
         } 
+        
+        Links link = new Links(driver);
+        link.logout().click();
+        
+        assertTrue(login.usernameExists(), "Logout was successful");
     }
     
 }

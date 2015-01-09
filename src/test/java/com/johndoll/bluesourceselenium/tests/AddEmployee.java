@@ -19,6 +19,7 @@ import org.testng.annotations.Test;
 public class AddEmployee {
     
     private static WebDriver driver;
+    private static Links link;
     
     @BeforeClass
     public static void setUpClass() throws Exception {
@@ -26,10 +27,12 @@ public class AddEmployee {
         driver.get("http://bluesourcestaging.herokuapp.com/");
         LoginPage login = new LoginPage(driver);
         login.login("company.admin", "The McRib is back");
+        link = new Links(driver);
     }
 
     @AfterClass
     public static void tearDownClass() throws Exception {
+        link.logout().click();
         driver.close();
     }
     
