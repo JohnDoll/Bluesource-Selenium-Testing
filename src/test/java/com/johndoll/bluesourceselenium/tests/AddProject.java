@@ -50,7 +50,7 @@ public class AddProject {
         project.createProject(projectName, clientPartner, teamLead, status, startDate, endDate);
         
         long timer = System.currentTimeMillis();
-        while (!project.createFailure() && !project.createSuccessful() && System.currentTimeMillis() - timer < 10000);
+        while (!project.createFailure() && !project.createSuccessful() && System.currentTimeMillis() - timer < ResourceLocation.PageWaitTime);
         
         try{
             assertTrue(project.createSuccessful(), "Project was created successfully");

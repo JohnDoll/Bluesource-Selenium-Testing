@@ -22,7 +22,7 @@ public class Titles {
     private static Links link;
     private static TitlePage title;
     private long timer;
-    
+            
     @BeforeClass
     public static void setUpClass() throws Exception {
         driver = new FirefoxDriver();
@@ -52,7 +52,7 @@ public class Titles {
         title.addTitle(titleName);
         
         timer = System.currentTimeMillis();
-        while (!title.createFailure() && !title.createSuccessful() && System.currentTimeMillis() - timer < 10000);
+        while (!title.createFailure() && !title.createSuccessful() && System.currentTimeMillis() - timer < ResourceLocation.PageWaitTime);
         
         try{
             assertTrue(title.createSuccessful(), "The title was successfully created");
@@ -65,6 +65,7 @@ public class Titles {
     
     @DataProvider
     public Object[][] editTitleData(){
+        System.out.println("edit title data");
         return new ExcelReader(ResourceLocation.TestDataLocation + "EditTitle.xlsx").worksheetToArray(1);
     }
     
@@ -76,7 +77,7 @@ public class Titles {
         title.editTitle(titleName, newTitleName);
         
         timer = System.currentTimeMillis();
-        while (!title.createFailure() && !title.createSuccessful() && System.currentTimeMillis() - timer < 10000);
+        while (!title.createFailure() && !title.createSuccessful() && System.currentTimeMillis() - timer < ResourceLocation.PageWaitTime);
         
         try{
             assertTrue(title.createSuccessful(), "The title was successfully edited");
@@ -89,6 +90,7 @@ public class Titles {
     
     @DataProvider
     public Object[][] deleteTitleData(){
+        System.out.println("delete title data");
         return new ExcelReader(ResourceLocation.TestDataLocation + "DeleteTitle.xlsx").worksheetToArray(1);
     }
     
@@ -100,7 +102,7 @@ public class Titles {
         title.deleteTitle(titleName);
         
         timer = System.currentTimeMillis();
-        while (!title.createFailure() && !title.createSuccessful() && System.currentTimeMillis() - timer < 10000);
+        while (!title.createFailure() && !title.createSuccessful() && System.currentTimeMillis() - timer < ResourceLocation.PageWaitTime);
         
         try{
             assertTrue(title.createSuccessful(), "The title was successfully deleted");

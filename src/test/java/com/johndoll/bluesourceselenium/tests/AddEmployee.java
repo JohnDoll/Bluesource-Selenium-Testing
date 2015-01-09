@@ -50,7 +50,7 @@ public class AddEmployee {
         employee.createNewEmployee(username, firstName, lastName, title, role, manager, status, bridgeTime, location, startDate, cellPhone, officePhone, email, imName, imClient, department);
         
         long timer = System.currentTimeMillis();
-        while (!employee.createFailure() && !employee.createSuccessful() && System.currentTimeMillis() - timer < 10000);
+        while (!employee.createFailure() && !employee.createSuccessful() && System.currentTimeMillis() - timer < ResourceLocation.PageWaitTime);
         
         try{
             assertTrue(employee.createSuccessful(), "Employee Created Successfully");
